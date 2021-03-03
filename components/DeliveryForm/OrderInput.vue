@@ -2,15 +2,17 @@
   <div>
     <OrderListLayout>
       <template #menu>
-        <select v-model="order.menu" name="">
-          <option
-            v-for="(menu, menuIndex) in menuList"
-            :key="menuIndex"
-            :value="menu"
-          >
-            {{ menu.name }} ({{ menu.prise | currency }})
-          </option>
-        </select>
+        <label>
+          <select v-model="order.menu" name="">
+            <option
+              v-for="(menu, menuIndex) in menuList"
+              :key="menuIndex"
+              :value="menu"
+            >
+              {{ menu.name }} ({{ menu.prise | currency }})
+            </option>
+          </select>
+        </label>
       </template>
       <template #wasabi>
         <label>
@@ -18,8 +20,8 @@
             v-model="order.withoutWasabi"
             type="checkbox"
             :disabled="!order.menu.wasabi"
-          />サビ抜き</label
-        >
+          />
+        </label>
       </template>
       <template #amount>
         <label>
@@ -41,18 +43,20 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { Component, Prop, Emit, Model } from 'vue-property-decorator'
+import OrderListLayout from '@/components/DeliveryForm/OrderListLayout'
 import { Menu, Order } from '~/models/Order'
 
-@Component
+@Component({
+  components: {
+    OrderListLayout,
+  },
+})
 export default class OrderInput extends Vue {
   @Prop({ type: Array as PropType<Menu[]>, required: true })
-  readonly menuList: Menu[]
-
-  // @Prop({ type: Object as PropType<Order>, required: true })
-  // readonly order: Order
+  readonly menuList!: Menu[]
 
   @Model('change', { type: Object as PropType<Order>, required: true })
-  readonly order
+  readonly order!: Order
 
   @Emit()
   removeOrder(): Order {
