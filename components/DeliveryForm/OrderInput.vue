@@ -43,7 +43,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { Component, Prop, Emit, Model } from 'vue-property-decorator'
-import OrderListLayout from '@/components/DeliveryForm/OrderListLayout'
+import OrderListLayout from '~/components/DeliveryForm/OrderListLayout.vue'
 import { Menu, Order } from '~/models/Order'
 
 @Component({

@@ -8,6 +8,16 @@
   </div>
 </template>
 
+<script lang="ts">
+import Vue from 'vue'
+import { Component } from 'vue-property-decorator'
+
+@Component({
+  name: 'OrderListLayout',
+})
+export default class OrderListLayout extends Vue {}
+</script>
+
 <style scoped>
 .container {
   padding: 0.5em;
