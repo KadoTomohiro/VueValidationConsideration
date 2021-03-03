@@ -109,9 +109,17 @@ export default class DeliveryFormComponent extends Vue {
     passwordConfirm: '',
   }
 
-  menuList: Menu[] = []
-  soySauces: SoySauces = []
-  optionList: OptionList = []
+  get menuList(): Menu[] {
+    return this.$store.state.menuList
+  }
+
+  get soySauces(): SoySauces {
+    return this.$store.state.soySauces
+  }
+
+  get optionList(): OptionList {
+    return this.$store.state.optionList
+  }
 
   get total() {
     return this.form.orders.reduce((sum: number, order: Order) => {
@@ -139,25 +147,6 @@ export default class DeliveryFormComponent extends Vue {
 
   sumTotal(order: Order): number {
     return order.menu.prise * order.amount
-  }
-
-  mounted() {
-    this.menuList = [
-      { name: 'マグロ', prise: 250, wasabi: true },
-      { name: 'タイ', prise: 300, wasabi: true },
-      { name: 'エビ', prise: 150, wasabi: true },
-      { name: 'タマゴ', prise: 100, wasabi: false },
-    ]
-    this.soySauces = [
-      { name: '特性醤油', value: 'tokusei' },
-      { name: 'だし醤油', value: 'dashi' },
-      { name: '刺身醤油', value: 'sashimi' },
-    ]
-    this.optionList = [
-      { name: 'がり', value: 'gari' },
-      { name: 'わさび', value: 'wasabi' },
-      { name: 'わりばし', value: 'waribashi' },
-    ]
   }
 }
 </script>
