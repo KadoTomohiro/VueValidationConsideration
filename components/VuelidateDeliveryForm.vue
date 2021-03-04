@@ -3,7 +3,16 @@
     <form @submit.prevent="onSubmit()">
       <div class="control-unit">
         <label for="name">氏名</label>
-        <input id="name" v-model="form.name" type="text" />
+        <input
+          id="name"
+          v-model="form.name"
+          type="text"
+          @input="$v.form.name.$touch()"
+          @blur="$v.form.name.$touch()"
+        />
+        <div v-if="$v.form.name.$invalid && $v.form.name.$dirty" class="error">
+          <span v-if="!$v.form.name.required">必須入力です</span>
+        </div>
       </div>
       <div class="control-unit">
         <label for="zipcode">郵便番号</label>
@@ -73,15 +82,21 @@
       </fieldset>
       <button>注文する</button>
     </form>
-    <pre>
-      {{ form }}
-    </pre>
+    <div>
+      <pre>
+        {{ form }}
+      </pre>
+      <pre>
+        {{ $v }}
+      </pre>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
+import { required, or, email } from 'vuelidate/lib/validators'
 import { Menu, Order } from '~/models/Order'
 import {
   DeliveryForm,
@@ -90,10 +105,34 @@ import {
 } from '~/components/DeliveryForm/DeliveryFormModels'
 import OrderInput from '~/components/DeliveryForm/OrderInput.vue'
 import OrderInputHeader from '~/components/DeliveryForm/OrderInputHeader.vue'
+import { zipCode, password } from '~/validators/PattenValidators'
+
+const unRegister = (value: any, vm: DeliveryForm): boolean => {
+  return !vm.isRegister
+}
 
 @Component({
   name: 'VuelidateDeliveryForm',
   components: { OrderInput, OrderInputHeader },
+  validations: {
+    form: {
+      name: { required },
+      zipcode: {
+        required,
+        zipCode: zipCode(false),
+      },
+      address: { required },
+      soySauce: { required },
+      email: {
+        requiredWhenRegister: or(unRegister, required),
+        email,
+      },
+      password: {
+        requiredWhenRegister: or(unRegister, required),
+        password,
+      },
+    },
+  },
 })
 export default class VuelidateDeliveryForm extends Vue {
   form: DeliveryForm = {
@@ -159,5 +198,10 @@ export default class VuelidateDeliveryForm extends Vue {
 
 ul {
   list-style: none;
+}
+
+.error {
+  font-size: 0.7em;
+  color: #ff6161;
 }
 </style>
