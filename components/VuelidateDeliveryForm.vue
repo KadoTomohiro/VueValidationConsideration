@@ -16,7 +16,22 @@
       </div>
       <div class="control-unit">
         <label for="zipcode">郵便番号</label>
-        <input id="zipcode" v-model="form.zipcode" type="text" />
+        <input
+          id="zipcode"
+          v-model="form.zipcode"
+          type="text"
+          @input="$v.form.zipcode.$touch()"
+          @blur="$v.form.zipcode.$touch()"
+        />
+        <div
+          v-if="$v.form.zipcode.$invalid && $v.form.zipcode.$dirty"
+          class="error"
+        >
+          <span v-if="!$v.form.zipcode.required">必須入力です</span>
+          <span v-if="!$v.form.zipcode.zipCode"
+            >数字7文字で入力してください</span
+          >
+        </div>
       </div>
       <div class="control-unit">
         <label for="address">住所</label>
@@ -65,7 +80,21 @@
         <legend>会員登録</legend>
         <div class="control-unit">
           <label for="email">メールアドレス</label>
-          <input id="email" v-model="form.email" type="email" />
+          <input
+            id="email"
+            v-model="form.email"
+            type="email"
+            @input="$v.form.email.$touch()"
+            @blur="$v.form.email.$touch()"
+          />
+          <div
+            v-if="$v.form.email.$invalid && $v.form.email.$dirty"
+            class="error"
+          >
+            <span v-if="!$v.form.email.requiredWhenRegister"
+              >会員登録をされる場合必須入力です</span
+            >
+          </div>
         </div>
         <div class="control-unit">
           <label for="password">パスワード</label>
@@ -96,7 +125,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
-import { required, or, email } from 'vuelidate/lib/validators'
+import { required, email, sameAs, requiredIf } from 'vuelidate/lib/validators'
 import { Menu, Order } from '~/models/Order'
 import {
   DeliveryForm,
@@ -107,8 +136,8 @@ import OrderInput from '~/components/DeliveryForm/OrderInput.vue'
 import OrderInputHeader from '~/components/DeliveryForm/OrderInputHeader.vue'
 import { zipCode, password } from '~/validators/PattenValidators'
 
-const unRegister = (value: any, vm: DeliveryForm): boolean => {
-  return !vm.isRegister
+export const requiredWhenRegister = (value: any, vm: DeliveryForm): boolean => {
+  return !vm.isRegister || required(value)
 }
 
 @Component({
@@ -124,12 +153,16 @@ const unRegister = (value: any, vm: DeliveryForm): boolean => {
       address: { required },
       soySauce: { required },
       email: {
-        requiredWhenRegister: or(unRegister, required),
+        requiredIfRegister: requiredIf('isRegister'),
         email,
       },
       password: {
-        requiredWhenRegister: or(unRegister, required),
+        requiredIfRegister: requiredIf('isRegister'),
         password,
+      },
+      passwordConfirm: {
+        requiredIfRegister: requiredIf('isRegister'),
+        sameAsPassword: sameAs('password'),
       },
     },
   },
