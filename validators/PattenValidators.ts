@@ -7,7 +7,7 @@ export function patternMatch(
   return helpers.regex(patternName, pattern)
 }
 export function zipCode(hyphen: boolean): ValidationRule {
-  const zipCodePattern = new RegExp(`[0-9]{3}${hyphen ? '-' : ''}[0-9]{7}`)
+  const zipCodePattern = new RegExp(`[0-9]{3}${hyphen ? '-' : ''}[0-9]{4}`)
   return patternMatch(zipCodePattern, 'zipCode')
 }
 

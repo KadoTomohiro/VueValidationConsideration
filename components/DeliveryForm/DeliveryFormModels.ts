@@ -1,18 +1,19 @@
 import { Order } from '~/models/Order'
-import { NameValue } from '~/models/UtilityTypes'
+import { Account } from '~/models/Account'
 
-export interface DeliveryForm {
+export interface DeliveryAddress {
   name: string
   zipcode: string
   address: string
+}
+
+export interface RegisterAccount extends Account {
+  passwordConfirm: string
+}
+
+export interface DeliveryForm extends DeliveryAddress, RegisterAccount {
   orders: Order[]
   soySauce: string
   options: string[]
   isRegister: boolean
-  email: string
-  password: string
-  passwordConfirm: string
 }
-
-export type SoySauces = NameValue<string>[]
-export type OptionList = NameValue<string>[]

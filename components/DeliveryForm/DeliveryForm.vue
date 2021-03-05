@@ -4,39 +4,26 @@
       <fieldset>
         <legend>お届け先</legend>
         <div class="control-unit">
-          <label for="name">氏名</label>
-          <input
-            id="name"
+          <CustomInput
             v-model="form.name"
-            type="text"
-            @input="$v.form.name.$touch()"
-            @blur="$v.form.name.$touch()"
-          />
-          <div
-            v-if="$v.form.name.$invalid && $v.form.name.$dirty"
-            class="error"
+            :validation="$v.form.name"
+            @touch="$v.form.name.$touch()"
           >
-            <span v-if="!$v.form.name.required">必須入力です</span>
-          </div>
+            氏名
+            <template #required>入力必須です</template>
+          </CustomInput>
         </div>
         <div class="control-unit">
-          <label for="zipcode">郵便番号</label>
-          <input
-            id="zipcode"
+          <CustomInput
             v-model="form.zipcode"
+            :validation="$v.form.zipcode"
             type="text"
-            @input="$v.form.zipcode.$touch()"
             @blur="$v.form.zipcode.$touch()"
-          />
-          <div
-            v-if="$v.form.zipcode.$invalid && $v.form.zipcode.$dirty"
-            class="error"
           >
-            <span v-if="!$v.form.zipcode.required">必須入力です</span>
-            <span v-if="!$v.form.zipcode.zipCode"
-              >数字7文字で入力してください</span
-            >
-          </div>
+            郵便番号
+            <template #required>必須入力です</template>
+            <template #zipCode>数字7文字で入力してください</template>
+          </CustomInput>
         </div>
         <div class="control-unit">
           <label for="address">住所</label>
@@ -104,12 +91,12 @@
             @input="$v.form.email.$touch()"
             @blur="$v.form.email.$touch()"
           />
-          <div
-            v-if="$v.form.email.$invalid && $v.form.email.$dirty"
-            class="error"
-          >
-            <span v-if="!$v.form.email.requiredWhenRegister"
+          <div v-if="$v.form.email.$error" class="error">
+            <span v-if="!$v.form.email.requiredIfRegister"
               >会員登録をされる場合必須入力です</span
+            >
+            <span v-if="!$v.form.email.email"
+              >有効なメールアドレスではありません</span
             >
           </div>
         </div>
@@ -143,19 +130,16 @@
 import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import { required, email, sameAs, requiredIf } from 'vuelidate/lib/validators'
-import { Menu, Order } from '~/models/Order'
-import {
-  DeliveryForm,
-  OptionList,
-  SoySauces,
-} from '~/components/DeliveryForm/DeliveryFormModels'
+import { Menu, Order, SoySauces, ToppingOptions } from '~/models/Order'
+import { DeliveryForm } from '~/components/DeliveryForm/DeliveryFormModels'
 import OrderInput from '~/components/DeliveryForm/OrderInput.vue'
 import OrderInputHeader from '~/components/DeliveryForm/OrderInputHeader.vue'
 import { zipCode, password } from '~/validators/PattenValidators'
+import CustomInput from '~/components/molecules/Input'
 
 @Component({
   name: 'DeliveryForm',
-  components: { OrderInput, OrderInputHeader },
+  components: { OrderInput, OrderInputHeader, CustomInput },
   validations: {
     form: {
       name: { required },
@@ -202,7 +186,7 @@ export default class DeliveryFormComponent extends Vue {
     return this.$store.state.soySauces
   }
 
-  get optionList(): OptionList {
+  get optionList(): ToppingOptions {
     return this.$store.state.optionList
   }
 
