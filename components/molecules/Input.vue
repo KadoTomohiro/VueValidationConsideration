@@ -1,13 +1,20 @@
 <template>
-  <div class="control-unit">
-    <label class="label"
-      ><slot>{{ label }}</slot></label
-    >
-    <input v-model="inputValue" :type="type" :placeholder="placeholder" @input="touch" @blur="blur" />
-    <small v-if="hasValidation && validation.$error" class="error">
-      <span v-for="invalid in invalidParamNames" :key="invalid"><slot :name="invalid"></slot></span>
-    </small>
-  </div>
+  <FormControlLayout>
+    <template #label>
+      <label class="label"
+        ><slot>{{ label }}</slot></label
+      >
+    </template>
+    <template #default>
+      <input v-model="inputValue" :type="type" :placeholder="placeholder" @input="touch" @blur="blur" />
+    </template>
+    <template #error>
+      <small v-if="hasValidation && validation.$error" class="error">
+        <span v-for="invalid in invalidParamNames" :key="invalid"><slot :name="invalid"></slot></span>
+      </small>
+    </template>
+  </FormControlLayout>
+  <!--  <div class="control-unit"></div>-->
 </template>
 
 <script lang="ts">
@@ -15,9 +22,12 @@ import Vue, { PropType } from 'vue'
 import { Component, Emit, Prop } from 'vue-property-decorator'
 import { Params } from 'vuelidate/lib/validators'
 import { Validation } from 'vuelidate'
-
+import FormControlLayout from '~/components/molecules/FormControlLayout.vue'
 @Component({
   name: 'CustomInput',
+  components: {
+    FormControlLayout,
+  },
 })
 export default class InputComponent extends Vue {
   @Prop({ type: String, required: false, default: 'text' })
