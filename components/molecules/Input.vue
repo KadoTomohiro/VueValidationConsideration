@@ -3,22 +3,17 @@
     <label class="label"
       ><slot>{{ label }}</slot></label
     >
-    <input
-      v-model="inputValue"
-      :type="type"
-      :placeholder="placeholder"
-      @input="touch"
-      @blur="blur"
-    />
-    <span v-if="hasValidation && validation.$error" class="error">
-      <slot v-if="invalid" :name="invalid"></slot>
-    </span>
+    <input v-model="inputValue" :type="type" :placeholder="placeholder" @input="touch" @blur="blur" />
+    <small v-if="hasValidation && validation.$error" class="error">
+      <span v-for="invalid in invalidParamNames" :key="invalid"><slot :name="invalid"></slot></span>
+    </small>
   </div>
 </template>
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { Component, Emit, Prop } from 'vue-property-decorator'
+import { Params } from 'vuelidate/lib/validators'
 import { Validation } from 'vuelidate'
 
 @Component({
@@ -29,22 +24,25 @@ export default class InputComponent extends Vue {
   readonly type!: string
 
   @Prop({ type: String, required: false })
-  readonly label: string
+  readonly label!: string
 
-  @Prop({ type: Object as PropType<Validation>, required: false })
-  validation!: Validation
-
-  @Prop({ type: String })
-  value: string
+  @Prop({ type: Object as PropType<Validation & Params>, required: false })
+  validation!: Validation & Params
 
   @Prop({ type: String })
-  placeholder: string
+  value!: string
+
+  @Prop({ type: String })
+  placeholder!: string
+
+  @Prop({ type: Number, required: false, default: 1 })
+  maxErrorShow!: number
 
   get inputValue(): string {
     return this.value
   }
 
-  set inputValue(value: string): void {
+  set inputValue(value: string) {
     this.$emit('input', value)
   }
 
@@ -52,14 +50,16 @@ export default class InputComponent extends Vue {
     return this.validation !== undefined
   }
 
-  get invalid(): string {
+  get invalidParamNames(): string[] {
     if (!this.hasValidation) {
-      return ''
+      console.log('no param')
+
+      return []
     }
-    const validationParamNames = Object.keys(this.validation.$params)
-    return validationParamNames.find(
-      (validationParamName) => !this.validation[validationParamName]
-    )
+    const validationParamNames: string[] = Object.keys(this.validation.$params)
+    const invalidParamNames =
+      validationParamNames.filter((validationParamName) => !this.validation[validationParamName]) || []
+    return invalidParamNames.slice(0, this.maxErrorShow)
   }
 
   @Emit()
@@ -89,5 +89,7 @@ input {
 .error {
   font-size: 0.7em;
   color: #ff6161;
+  display: flex;
+  flex-direction: column;
 }
 </style>

@@ -4,11 +4,7 @@
       <template #menu>
         <label>
           <select v-model="order.menu" name="">
-            <option
-              v-for="(menu, menuIndex) in menuList"
-              :key="menuIndex"
-              :value="menu"
-            >
+            <option v-for="(menu, menuIndex) in menuList" :key="menuIndex" :value="menu">
               {{ menu.name }} ({{ menu.prise | currency }})
             </option>
           </select>
@@ -16,17 +12,11 @@
       </template>
       <template #wasabi>
         <label>
-          <input
-            v-model="order.withoutWasabi"
-            type="checkbox"
-            :disabled="!order.menu.wasabi"
-          />
+          <input v-model="order.withoutWasabi" type="checkbox" :disabled="!order.menu.wasabi" />
         </label>
       </template>
       <template #amount>
-        <label>
-          <input v-model="order.amount" type="number" class="order-amount" />個
-        </label>
+        <label> <input v-model="order.amount" type="number" class="order-amount" />個 </label>
       </template>
       <template #sumTotal>
         <output>

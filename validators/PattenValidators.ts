@@ -1,13 +1,10 @@
 import { helpers, ValidationRule } from 'vuelidate/lib/validators'
 
-export function patternMatch(
-  pattern: RegExp,
-  patternName: string = 'pattern'
-): ValidationRule {
+export function patternMatch(pattern: RegExp, patternName: string = 'pattern'): ValidationRule {
   return helpers.regex(patternName, pattern)
 }
 export function zipCode(hyphen: boolean): ValidationRule {
-  const zipCodePattern = new RegExp(`[0-9]{3}${hyphen ? '-' : ''}[0-9]{4}`)
+  const zipCodePattern = new RegExp(`^[0-9]{3}${hyphen ? '-' : ''}[0-9]{4}$`)
   return patternMatch(zipCodePattern, 'zipCode')
 }
 

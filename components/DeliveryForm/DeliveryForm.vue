@@ -3,32 +3,25 @@
     <form @submit.prevent="onSubmit()">
       <fieldset>
         <legend>お届け先</legend>
-        <div class="control-unit">
-          <CustomInput
-            v-model="form.name"
-            :validation="$v.form.name"
-            @touch="$v.form.name.$touch()"
-          >
-            氏名
-            <template #required>入力必須です</template>
-          </CustomInput>
-        </div>
-        <div class="control-unit">
-          <CustomInput
-            v-model="form.zipcode"
-            :validation="$v.form.zipcode"
-            type="text"
-            @blur="$v.form.zipcode.$touch()"
-          >
-            郵便番号
-            <template #required>必須入力です</template>
-            <template #zipCode>数字7文字で入力してください</template>
-          </CustomInput>
-        </div>
-        <div class="control-unit">
-          <label for="address">住所</label>
-          <input id="address" v-model="form.address" type="text" />
-        </div>
+        <CustomInput v-model="form.name" :validation="$v.form.name" @touch="$v.form.name.$touch()">
+          氏名
+          <template #required>入力必須です</template>
+        </CustomInput>
+        <CustomInput
+          v-model="form.zipcode"
+          :validation="$v.form.zipcode"
+          @blur="$v.form.zipcode.$touch()"
+          :max-error-show="2"
+        >
+          郵便番号
+          <template #required>必須入力です</template>
+          <template #zipCode>数字7文字で入力してください</template>
+          <template #email>メールじゃない</template>
+        </CustomInput>
+        <CustomInput v-model="form.address" :validation="$v.form.address" @touch="$v.form.address.$touch()"
+          >住所
+          <template #required>必須入力です</template>
+        </CustomInput>
       </fieldset>
 
       <fieldset>
@@ -52,22 +45,14 @@
         <div class="control-unit">
           <label>醤油の種類</label>
           <label v-for="soySauce in soySauces" :key="soySauce.value">
-            <input
-              v-model="form.soySauce"
-              type="radio"
-              :value="soySauce.value"
-            />
+            <input v-model="form.soySauce" type="radio" :value="soySauce.value" />
             {{ soySauce.name }}
           </label>
         </div>
         <div class="control-unit">
           <label>オプション</label>
           <label v-for="option in optionList" :key="option.value">
-            <input
-              v-model="form.options"
-              type="checkbox"
-              :value="option.value"
-            />
+            <input v-model="form.options" type="checkbox" :value="option.value" />
             {{ option.name }}
           </label>
         </div>
@@ -92,12 +77,8 @@
             @blur="$v.form.email.$touch()"
           />
           <div v-if="$v.form.email.$error" class="error">
-            <span v-if="!$v.form.email.requiredIfRegister"
-              >会員登録をされる場合必須入力です</span
-            >
-            <span v-if="!$v.form.email.email"
-              >有効なメールアドレスではありません</span
-            >
+            <span v-if="!$v.form.email.requiredIfRegister">会員登録をされる場合必須入力です</span>
+            <span v-if="!$v.form.email.email">有効なメールアドレスではありません</span>
           </div>
         </div>
         <div class="control-unit">
@@ -106,11 +87,7 @@
         </div>
         <div class="control-unit">
           <label for="passwordConfirm">パスワード確認</label>
-          <input
-            id="passwordConfirm"
-            v-model="form.passwordConfirm"
-            type="password"
-          />
+          <input id="passwordConfirm" v-model="form.passwordConfirm" type="password" />
         </div>
       </fieldset>
       <button>注文する</button>
@@ -135,7 +112,7 @@ import { DeliveryForm } from '~/components/DeliveryForm/DeliveryFormModels'
 import OrderInput from '~/components/DeliveryForm/OrderInput.vue'
 import OrderInputHeader from '~/components/DeliveryForm/OrderInputHeader.vue'
 import { zipCode, password } from '~/validators/PattenValidators'
-import CustomInput from '~/components/molecules/Input'
+import CustomInput from '~/components/molecules/Input.vue'
 
 @Component({
   name: 'DeliveryForm',
@@ -146,6 +123,7 @@ import CustomInput from '~/components/molecules/Input'
       zipcode: {
         required,
         zipCode: zipCode(false),
+        email,
       },
       address: { required },
       soySauce: { required },
