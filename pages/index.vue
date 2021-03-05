@@ -1,7 +1,6 @@
 <template>
   <div>
     <DeliveryForm></DeliveryForm>
-<!--    <VuelidateDeliveryForm></VuelidateDeliveryForm>-->
   </div>
 </template>
 
