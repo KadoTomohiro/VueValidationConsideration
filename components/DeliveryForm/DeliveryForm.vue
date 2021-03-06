@@ -3,27 +3,23 @@
     <form @submit.prevent="onSubmit()">
       <fieldset>
         <legend>お届け先</legend>
-        <CustomInput v-model="form.name" :validation="$v.form.name" @touch="$v.form.name.$touch()">
-          氏名
+        <ControlField label="氏名" :validation="$v.form.name">
+          <TextInput v-model="form.name" @touch="$v.form.name.$touch()"></TextInput>
           <template #required>入力必須です</template>
-        </CustomInput>
-        <CustomInput
-          v-model="form.zipcode"
-          :validation="$v.form.zipcode"
-          @blur="$v.form.zipcode.$touch()"
-          :max-error-show="2"
-        >
-          郵便番号
+        </ControlField>
+
+        <ControlField :validation="$v.form.zipcode" :max-error-show="2" @blur="$v.form.zipcode.$touch()">
+          <template #label>郵便番号</template>
+          <TextInput v-model="form.zipcode" @touch="$v.form.zipcode.$touch()"></TextInput>
           <template #required>必須入力です</template>
           <template #zipCode>数字7文字で入力してください</template>
-          <template #email>メールじゃない</template>
-        </CustomInput>
-        <CustomInput v-model="form.address" :validation="$v.form.address" @touch="$v.form.address.$touch()"
-          >住所
-          <template #required>必須入力です</template>
-        </CustomInput>
-      </fieldset>
+        </ControlField>
 
+        <ControlField label="住所" :validation="$v.form.address" @touch="$v.form.address.$touch()">
+          <TextInput v-model="form.address" @touch="$v.form.address.$touch()"></TextInput>
+          <template #required>必須入力です</template>
+        </ControlField>
+      </fieldset>
       <fieldset>
         <legend>ご注文</legend>
         <div class="control-unit">
@@ -112,18 +108,17 @@ import { DeliveryForm } from '~/components/DeliveryForm/DeliveryFormModels'
 import OrderInput from '~/components/DeliveryForm/OrderInput.vue'
 import OrderInputHeader from '~/components/DeliveryForm/OrderInputHeader.vue'
 import { zipCode, password } from '~/validators/PattenValidators'
-import CustomInput from '~/components/molecules/Input.vue'
+import ControlField from '~/components/molecules/ControlField.vue'
 
 @Component({
   name: 'DeliveryForm',
-  components: { OrderInput, OrderInputHeader, CustomInput },
+  components: { OrderInput, OrderInputHeader, ControlField },
   validations: {
     form: {
       name: { required },
       zipcode: {
         required,
         zipCode: zipCode(false),
-        email,
       },
       address: { required },
       soySauce: { required },

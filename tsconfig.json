@@ -24,12 +24,20 @@
       ]
     },
     "types": [
+      "jest",
       "@nuxt/types",
       "@nuxtjs/axios",
       "@types/node",
       "@types/vue"
     ]
   },
+  "files": [
+    "shims-vue.d.ts"
+  ],
+  "include": [
+    "/**/*.ts",
+    "/**/*.vue"
+  ],
   "exclude": [
     "node_modules",
     ".nuxt",

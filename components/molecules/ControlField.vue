@@ -1,12 +1,12 @@
 <template>
   <FormControlLayout>
     <template #label>
-      <label class="label"
-        ><slot>{{ label }}</slot></label
+      <FormLabel
+        ><slot name="label">{{ label }}</slot></FormLabel
       >
     </template>
     <template #default>
-      <input v-model="inputValue" :type="type" :placeholder="placeholder" @input="touch" @blur="blur" />
+      <slot></slot>
     </template>
     <template #error>
       <small v-if="hasValidation && validation.$error" class="error">
@@ -23,13 +23,14 @@ import { Component, Emit, Prop } from 'vue-property-decorator'
 import { Params } from 'vuelidate/lib/validators'
 import { Validation } from 'vuelidate'
 import FormControlLayout from '~/components/molecules/FormControlLayout.vue'
+
 @Component({
-  name: 'CustomInput',
+  name: 'ControlField',
   components: {
     FormControlLayout,
   },
 })
-export default class InputComponent extends Vue {
+export default class ControlFieldComponent extends Vue {
   @Prop({ type: String, required: false, default: 'text' })
   readonly type!: string
 
@@ -39,22 +40,8 @@ export default class InputComponent extends Vue {
   @Prop({ type: Object as PropType<Validation & Params>, required: false })
   validation!: Validation & Params
 
-  @Prop({ type: String })
-  value!: string
-
-  @Prop({ type: String })
-  placeholder!: string
-
   @Prop({ type: Number, required: false, default: 1 })
   maxErrorShow!: number
-
-  get inputValue(): string {
-    return this.value
-  }
-
-  set inputValue(value: string) {
-    this.$emit('input', value)
-  }
 
   get hasValidation() {
     return this.validation !== undefined
@@ -85,17 +72,6 @@ export default class InputComponent extends Vue {
 </script>
 
 <style scoped>
-.control-unit {
-  display: flex;
-  flex-direction: column;
-}
-.label {
-  font-size: 0.8em;
-}
-input {
-  margin: 0.3em 0;
-  padding: 0.5em;
-}
 .error {
   font-size: 0.7em;
   color: #ff6161;
