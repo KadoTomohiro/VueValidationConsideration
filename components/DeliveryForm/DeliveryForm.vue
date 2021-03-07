@@ -8,14 +8,14 @@
           <template #required>入力必須です</template>
         </ControlField>
 
-        <ControlField :validation="$v.form.zipcode" :max-error-show="2" @blur="$v.form.zipcode.$touch()">
+        <ControlField :validation="$v.form.zipcode" :max-error-show="2">
           <template #label>郵便番号</template>
           <TextInput v-model="form.zipcode" @touch="$v.form.zipcode.$touch()"></TextInput>
           <template #required>必須入力です</template>
           <template #zipCode>数字7文字で入力してください</template>
         </ControlField>
 
-        <ControlField label="住所" :validation="$v.form.address" @touch="$v.form.address.$touch()">
+        <ControlField label="住所" :validation="$v.form.address">
           <TextInput v-model="form.address" @touch="$v.form.address.$touch()"></TextInput>
           <template #required>必須入力です</template>
         </ControlField>
@@ -36,31 +36,30 @@
             </li>
           </ul>
           <button type="button" @click="addOrder()">+</button>
+          <span v-if="$v.form.orders.$invalid">必須入力</span>
         </div>
         <div>合計{{ total | currency }}</div>
-        <div class="control-unit">
-          <label>醤油の種類</label>
+        <ControlField label="醤油の種類" :validation="$v.form.soySauce">
           <label v-for="soySauce in soySauces" :key="soySauce.value">
             <input v-model="form.soySauce" type="radio" :value="soySauce.value" />
             {{ soySauce.name }}
           </label>
-        </div>
-        <div class="control-unit">
-          <label>オプション</label>
+          <template #required>醤油を一種類お選びください</template>
+        </ControlField>
+        <ControlField label="オプション">
           <label v-for="option in optionList" :key="option.value">
             <input v-model="form.options" type="checkbox" :value="option.value" />
             {{ option.name }}
           </label>
-        </div>
+        </ControlField>
       </fieldset>
 
-      <div class="control-unit">
+      <ControlField>
         <label>
           <input v-model="form.isRegister" type="checkbox" />
           会員登録する
         </label>
-      </div>
-
+      </ControlField>
       <fieldset :disabled="!form.isRegister">
         <legend>会員登録</legend>
         <div class="control-unit">
@@ -77,14 +76,20 @@
             <span v-if="!$v.form.email.email">有効なメールアドレスではありません</span>
           </div>
         </div>
-        <div class="control-unit">
-          <label for="password">パスワード</label>
-          <input id="password" v-model="form.password" type="password" />
-        </div>
-        <div class="control-unit">
-          <label for="passwordConfirm">パスワード確認</label>
-          <input id="passwordConfirm" v-model="form.passwordConfirm" type="password" />
-        </div>
+        <ControlField label="パスワード" :validation="$v.form.password">
+          <TextInput type="password" v-model="form.password" @touch="$v.form.password.$touch()"></TextInput>
+          <template #requiredIfRegister>会員登録される場合必須登録です</template>
+          <template #password>半角英数8文字以上24文字以内で入力してください</template>
+        </ControlField>
+        <ControlField label="パスワード確認" :validation="$v.form.passwordConfirm">
+          <TextInput
+            type="password"
+            v-model="form.passwordConfirm"
+            @touch="$v.form.passwordConfirm.$touch()"
+          ></TextInput>
+          <template #requiredIfRegister>会員登録される場合必須登録で</template>
+          <template #sameAsPassword>パスワードが一致しません</template>
+        </ControlField>
       </fieldset>
       <button>注文する</button>
     </form>
@@ -108,11 +113,10 @@ import { DeliveryForm } from '~/components/DeliveryForm/DeliveryFormModels'
 import OrderInput from '~/components/DeliveryForm/OrderInput.vue'
 import OrderInputHeader from '~/components/DeliveryForm/OrderInputHeader.vue'
 import { zipCode, password } from '~/validators/PattenValidators'
-import ControlField from '~/components/molecules/ControlField.vue'
 
 @Component({
   name: 'DeliveryForm',
-  components: { OrderInput, OrderInputHeader, ControlField },
+  components: { OrderInput, OrderInputHeader },
   validations: {
     form: {
       name: { required },
@@ -121,6 +125,9 @@ import ControlField from '~/components/molecules/ControlField.vue'
         zipCode: zipCode(false),
       },
       address: { required },
+      orders: {
+        required,
+      },
       soySauce: { required },
       email: {
         requiredIfRegister: requiredIf('isRegister'),
