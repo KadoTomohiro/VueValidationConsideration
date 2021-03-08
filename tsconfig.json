@@ -28,7 +28,8 @@
       "@nuxt/types",
       "@nuxtjs/axios",
       "@types/node",
-      "@types/vue"
+      "@types/vue",
+      "@types/vuelidate"
     ]
   },
   "files": [

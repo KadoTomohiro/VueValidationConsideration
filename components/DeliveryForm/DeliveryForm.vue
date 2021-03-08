@@ -48,13 +48,15 @@
               {{ soySauce.name }}
             </RadioInput>
           </template>
+
           <template #required>醤油を一種類お選びください</template>
         </ControlField>
         <ControlField label="オプション">
-          <label v-for="option in optionList" :key="option.value">
-            <input v-model="form.options" type="checkbox" :value="option.value" />
-            {{ option.name }}
-          </label>
+          <template v-for="option in optionList">
+            <CheckboxInput :key="option.value" v-model="form.options" :value="option.value">{{
+              option.name
+            }}</CheckboxInput>
+          </template>
         </ControlField>
       </fieldset>
 
@@ -71,20 +73,6 @@
           <template #requiredIfRegister>会員登録される場合入力必須です。</template>
           <template #email>有効なメールアドレスではありません</template>
         </ControlField>
-        <!--        <div class="control-unit">-->
-        <!--          <label for="email">メールアドレス</label>-->
-        <!--          <input-->
-        <!--            id="email"-->
-        <!--            v-model="form.email"-->
-        <!--            type="email"-->
-        <!--            @input="$v.form.email.$touch()"-->
-        <!--            @blur="$v.form.email.$touch()"-->
-        <!--          />-->
-        <!--          <div v-if="$v.form.email.$error" class="error">-->
-        <!--            <span v-if="!$v.form.email.requiredIfRegister">会員登録をされる場合必須入力です</span>-->
-        <!--            <span v-if="!$v.form.email.email">有効なメールアドレスではありません</span>-->
-        <!--          </div>-->
-        <!--        </div>-->
         <ControlField label="パスワード" :validation="$v.form.password">
           <TextInput v-model="form.password" type="password" @touch="$v.form.password.$touch()"></TextInput>
           <template #requiredIfRegister>会員登録される場合必須登録です</template>
@@ -215,15 +203,7 @@ export default class DeliveryFormComponent extends Vue {
   justify-content: center;
 }
 
-ul {
-  list-style: none;
-}
-
 .control-unit {
   margin: 1em;
-}
-.error {
-  font-size: 0.7em;
-  color: #ff6161;
 }
 </style>

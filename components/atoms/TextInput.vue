@@ -1,5 +1,5 @@
 <template>
-  <input v-model="inputValue" :type="type" :placeholder="placeholder" @input="touch" @blur="blur" />
+  <input v-model="inputValue" :type="type" @input="touch" @blur="blur" />
 </template>
 
 <script lang="ts">
@@ -13,19 +13,16 @@ export default class TextInputComponent extends Vue {
   @Prop({ type: String, required: false, default: 'text' })
   readonly type!: string
 
-  @Prop({ type: String })
-  value!: string
+  @Prop({ type: [String, Number] })
+  value!: string | number
 
-  get inputValue(): string {
+  get inputValue(): string | number {
     return this.value
   }
 
-  set inputValue(value: string) {
+  set inputValue(value: string | number) {
     this.$emit('input', value)
   }
-
-  @Prop({ type: String })
-  placeholder!: string
 
   @Emit()
   touch(event: UIEvent): UIEvent {
@@ -41,7 +38,7 @@ export default class TextInputComponent extends Vue {
 
 <style scoped>
 input {
-  margin: 0.3em 0;
-  padding: 0.5em;
+  padding: 0 0.5rem;
+  height: 2rem;
 }
 </style>

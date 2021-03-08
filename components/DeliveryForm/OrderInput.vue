@@ -3,7 +3,7 @@
     <OrderListLayout>
       <template #menu>
         <label>
-          <select v-model="order.menu" name="">
+          <select v-model="order.menu">
             <option v-for="(menu, menuIndex) in menuList" :key="menuIndex" :value="menu">
               {{ menu.name }} ({{ menu.prise | currency }})
             </option>
@@ -12,12 +12,12 @@
       </template>
       <template #wasabi>
         <label>
-          <input v-model="order.withoutWasabi" type="checkbox" :disabled="!order.menu.wasabi" />
+          <CheckboxInput v-model="order.withoutWasabi" :disabled="!order.menu.wasabi"></CheckboxInput>
         </label>
       </template>
       <template #amount>
         <ControlField :validation="$v.order.amount" :error="$v.order.amount.$invalid">
-          <label> <input v-model="order.amount" type="number" class="order-amount" min="0" />個</label>
+          <label><TextInput v-model="order.amount" type="number" class="order-amount" min="0"></TextInput>個</label>
           <template #required>必須</template>
           <template #min>1つ以上ご注文ください</template>
         </ControlField>
@@ -78,5 +78,9 @@ export default class OrderInput extends Vue {
 <style scoped>
 .order-amount {
   width: 4em;
+}
+
+select {
+  height: 2rem;
 }
 </style>
