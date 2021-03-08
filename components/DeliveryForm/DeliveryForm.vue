@@ -23,23 +23,26 @@
       <fieldset>
         <legend>ご注文</legend>
         <div class="control-unit">
-          <ul>
-            <li>
-              <OrderInputHeader></OrderInputHeader>
-            </li>
-            <li v-for="(order, index) in form.orders" :key="index">
-              <OrderInput
-                v-model="form.orders[index]"
-                :menu-list="menuList"
-                @remove-order="removeOrder(index)"
-              ></OrderInput>
-            </li>
-          </ul>
+          <ControlField :validation="$v.form.orders" :error="$v.form.orders.$invalid">
+            <ul>
+              <li>
+                <OrderInputHeader></OrderInputHeader>
+              </li>
+              <li v-for="(order, index) in form.orders" :key="index">
+                <OrderInput
+                  v-model="form.orders[index]"
+                  :menu-list="menuList"
+                  @remove-order="removeOrder(index)"
+                ></OrderInput>
+              </li>
+            </ul>
+            <template #required>商品を一点以上お選びください</template>
+          </ControlField>
+
           <button type="button" @click="addOrder()">+</button>
-          <span v-if="$v.form.orders.$invalid">必須入力</span>
         </div>
         <div>合計{{ total | currency }}</div>
-        <ControlField label="醤油の種類" :validation="$v.form.soySauce">
+        <ControlField label="醤油の種類" :validation="$v.form.soySauce" :error="$v.form.soySauce.$invalid">
           <label v-for="soySauce in soySauces" :key="soySauce.value">
             <input v-model="form.soySauce" type="radio" :value="soySauce.value" />
             {{ soySauce.name }}
@@ -77,14 +80,14 @@
           </div>
         </div>
         <ControlField label="パスワード" :validation="$v.form.password">
-          <TextInput type="password" v-model="form.password" @touch="$v.form.password.$touch()"></TextInput>
+          <TextInput v-model="form.password" type="password" @touch="$v.form.password.$touch()"></TextInput>
           <template #requiredIfRegister>会員登録される場合必須登録です</template>
           <template #password>半角英数8文字以上24文字以内で入力してください</template>
         </ControlField>
         <ControlField label="パスワード確認" :validation="$v.form.passwordConfirm">
           <TextInput
-            type="password"
             v-model="form.passwordConfirm"
+            type="password"
             @touch="$v.form.passwordConfirm.$touch()"
           ></TextInput>
           <template #requiredIfRegister>会員登録される場合必須登録で</template>

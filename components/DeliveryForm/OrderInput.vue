@@ -16,7 +16,11 @@
         </label>
       </template>
       <template #amount>
-        <label> <input v-model="order.amount" type="number" class="order-amount" />個 </label>
+        <ControlField :validation="$v.order.amount" :error="$v.order.amount.$invalid">
+          <label> <input v-model="order.amount" type="number" class="order-amount" min="0" />個</label>
+          <template #required>必須</template>
+          <template #min>1つ以上ご注文ください</template>
+        </ControlField>
       </template>
       <template #sumTotal>
         <output>
@@ -27,18 +31,30 @@
         <button type="button" @click="removeOrder()">-</button>
       </template>
     </OrderListLayout>
+    <!--    <pre>{{ $v.order.amount }}</pre>-->
   </div>
 </template>
 
 <script lang="ts">
 import Vue, { PropType } from 'vue'
 import { Component, Prop, Emit, Model } from 'vue-property-decorator'
+import { required, minValue } from 'vuelidate/lib/validators'
 import OrderListLayout from '~/components/DeliveryForm/OrderListLayout.vue'
 import { Menu, Order } from '~/models/Order'
-
 @Component({
   components: {
     OrderListLayout,
+  },
+  validations: {
+    order: {
+      menu: {
+        name: { required },
+      },
+      amount: {
+        required,
+        min: minValue(1),
+      },
+    },
   },
 })
 export default class OrderInput extends Vue {

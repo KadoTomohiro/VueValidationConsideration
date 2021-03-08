@@ -22,6 +22,8 @@ export default class OrderListLayout extends Vue {}
 .container {
   padding: 0.5em;
   border-bottom: #a0a0a0 solid 1px;
+  display: flex;
+  align-items: flex-start;
 }
 .slot {
   display: inline-block;

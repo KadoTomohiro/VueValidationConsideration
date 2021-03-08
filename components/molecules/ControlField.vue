@@ -9,7 +9,7 @@
       <slot></slot>
     </template>
     <template #error>
-      <small v-if="hasValidation && validation.$error" class="error">
+      <small v-if="error || (hasValidation && validation.$error)" class="error">
         <span v-for="invalid in invalidParamNames" :key="invalid"><slot :name="invalid"></slot></span>
       </small>
     </template>
@@ -42,6 +42,9 @@ export default class ControlFieldComponent extends Vue {
 
   @Prop({ type: Number, required: false, default: 1 })
   maxErrorShow!: number
+
+  @Prop({ type: Boolean, default: false })
+  readonly error!: boolean
 
   get hasValidation() {
     return this.validation !== undefined
@@ -77,5 +80,6 @@ export default class ControlFieldComponent extends Vue {
   color: #ff6161;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
 }
 </style>

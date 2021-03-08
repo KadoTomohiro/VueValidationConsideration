@@ -1,5 +1,5 @@
 <template>
-  <label class="label" :id="id"
+  <label :id="id" class="label"
     ><slot>{{ text }}</slot></label
   >
 </template>
@@ -22,6 +22,8 @@ export default class FormLabelComponent extends Vue {
 
 <style scoped>
 .label {
+  display: inline-block;
   font-size: 0.8em;
+  height: auto;
 }
 </style>
