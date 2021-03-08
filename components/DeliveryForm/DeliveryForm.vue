@@ -43,10 +43,11 @@
         </div>
         <div>合計{{ total | currency }}</div>
         <ControlField label="醤油の種類" :validation="$v.form.soySauce" :error="$v.form.soySauce.$invalid">
-          <label v-for="soySauce in soySauces" :key="soySauce.value">
-            <input v-model="form.soySauce" type="radio" :value="soySauce.value" />
-            {{ soySauce.name }}
-          </label>
+          <template v-for="soySauce in soySauces">
+            <RadioInput :key="soySauce.value" v-model="form.soySauce" :value="soySauce.value">
+              {{ soySauce.name }}
+            </RadioInput>
+          </template>
           <template #required>醤油を一種類お選びください</template>
         </ControlField>
         <ControlField label="オプション">
@@ -65,20 +66,25 @@
       </ControlField>
       <fieldset :disabled="!form.isRegister">
         <legend>会員登録</legend>
-        <div class="control-unit">
-          <label for="email">メールアドレス</label>
-          <input
-            id="email"
-            v-model="form.email"
-            type="email"
-            @input="$v.form.email.$touch()"
-            @blur="$v.form.email.$touch()"
-          />
-          <div v-if="$v.form.email.$error" class="error">
-            <span v-if="!$v.form.email.requiredIfRegister">会員登録をされる場合必須入力です</span>
-            <span v-if="!$v.form.email.email">有効なメールアドレスではありません</span>
-          </div>
-        </div>
+        <ControlField label="メールアドレス" :validate="$v.form.email">
+          <TextInput v-model="form.email"></TextInput>
+          <template #requiredIfRegister>会員登録される場合入力必須です。</template>
+          <template #email>有効なメールアドレスではありません</template>
+        </ControlField>
+        <!--        <div class="control-unit">-->
+        <!--          <label for="email">メールアドレス</label>-->
+        <!--          <input-->
+        <!--            id="email"-->
+        <!--            v-model="form.email"-->
+        <!--            type="email"-->
+        <!--            @input="$v.form.email.$touch()"-->
+        <!--            @blur="$v.form.email.$touch()"-->
+        <!--          />-->
+        <!--          <div v-if="$v.form.email.$error" class="error">-->
+        <!--            <span v-if="!$v.form.email.requiredIfRegister">会員登録をされる場合必須入力です</span>-->
+        <!--            <span v-if="!$v.form.email.email">有効なメールアドレスではありません</span>-->
+        <!--          </div>-->
+        <!--        </div>-->
         <ControlField label="パスワード" :validation="$v.form.password">
           <TextInput v-model="form.password" type="password" @touch="$v.form.password.$touch()"></TextInput>
           <template #requiredIfRegister>会員登録される場合必須登録です</template>
