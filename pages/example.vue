@@ -1,10 +1,16 @@
 <template>
   <div>
-    <label>text: <input type="text" v-model="text" /></label>
-    <div class="errors" v-if="$v.text.$invalid">
+    <label>text: <input v-model="text" type="text" @input="$v.text.$touch()" /></label>
+    <div v-if="$v.text.$invalid" class="errors">
       <span v-if="!$v.text.required">必須入力です</span>
       <span v-if="!$v.text.maxLength">10文字以内で入力してください</span>
     </div>
+
+    <input v-model="user.name" type="text" />
+    <pre>
+       {{ $v }}
+     </pre
+    >
   </div>
 </template>
 
@@ -20,10 +26,18 @@ import { maxLength, required } from 'vuelidate/lib/validators'
       required,
       maxLength: maxLength(10),
     },
+    user: {
+      name: {
+        required,
+      },
+    },
   },
 })
 export default class Example extends Vue {
   text: string = ''
+  user = {
+    name: '角',
+  }
 }
 </script>
 

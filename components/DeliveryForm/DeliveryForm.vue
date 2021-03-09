@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <form @submit.prevent="onSubmit()">
+    <form>
       <fieldset>
         <legend>お届け先</legend>
         <ControlField label="氏名" :validation="$v.form.name">
@@ -69,7 +69,7 @@
       <fieldset :disabled="!form.isRegister">
         <legend>会員登録</legend>
         <ControlField label="メールアドレス" :validate="$v.form.email">
-          <TextInput v-model="form.email"></TextInput>
+          <TextInput v-model="form.email" @touch="$v.form.email.$touch()"></TextInput>
           <template #requiredIfRegister>会員登録される場合入力必須です。</template>
           <template #email>有効なメールアドレスではありません</template>
         </ControlField>
@@ -88,7 +88,7 @@
           <template #sameAsPassword>パスワードが一致しません</template>
         </ControlField>
       </fieldset>
-      <button>注文する</button>
+      <button type="button" @click="submit()">注文する</button>
     </form>
     <div>
       <pre>
@@ -102,9 +102,9 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
 import { Component } from 'vue-property-decorator'
 import { required, email, sameAs, requiredIf } from 'vuelidate/lib/validators'
+import Vue from 'vue'
 import { Menu, Order, SoySauces, ToppingOptions } from '~/models/Order'
 import { DeliveryForm } from '~/components/DeliveryForm/DeliveryFormModels'
 import OrderInput from '~/components/DeliveryForm/OrderInput.vue'
@@ -189,7 +189,14 @@ export default class DeliveryFormComponent extends Vue {
     this.form.orders.splice(index, 1)
   }
 
-  onSubmit(): void {}
+  submit(): void {
+    if (this.$v.$invalid) {
+      alert('入力エラーがあります')
+      return
+    }
+
+    this.$emit('submit', this.form)
+  }
 
   sumTotal(order: Order): number {
     return order.menu.prise * order.amount
