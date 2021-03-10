@@ -2,7 +2,7 @@ import { NameValue } from '~/models/UtilityTypes'
 
 export interface Menu {
   name: string
-  prise: number
+  price: number
   wasabi: boolean
 }
 
