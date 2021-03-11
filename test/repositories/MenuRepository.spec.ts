@@ -1,5 +1,4 @@
 import MenuRepository from '~/repositories/MenuRepository'
-import { NuxtAxiosInstance } from '@nuxtjs/axios'
 
 const axiosMock = {
   $get: jest.fn(),

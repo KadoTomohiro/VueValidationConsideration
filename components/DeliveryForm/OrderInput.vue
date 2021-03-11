@@ -70,7 +70,11 @@ export default class OrderInput extends Vue {
   }
 
   subtotal(order: Order) {
-    return order.menu.prise * order.amount || 0
+    return order.menu.price * order.amount || 0
+  }
+
+  created() {
+    console.log(this.menuList)
   }
 }
 </script>

@@ -1,14 +1,12 @@
-import { NuxtAxiosInstance } from '@nuxtjs/axios'
+import { Context } from '@nuxt/types/app'
 
-export default function ({ $axios, redirect }: { $axios: NuxtAxiosInstance; redirect: (path: string) => void }) {
-  $axios.interceptors.response.use()
+export default function (ctx: Context) {
+  ctx.$axios.onRequest(() => {})
 
-  $axios.onRequest(() => {})
-
-  $axios.onError((error) => {
+  ctx.$axios.onError((error) => {
     const code = error.response?.status
     if (code === 400) {
-      redirect('/400')
+      ctx.redirect('/notFound')
     }
   })
 }

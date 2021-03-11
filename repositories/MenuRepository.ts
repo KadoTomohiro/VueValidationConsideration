@@ -7,7 +7,7 @@ type MenuAPIResponseDiffers = {
 
 type Trans<B, D> = Exclude<B, D> & D
 
-type MenuAPIResponse = Trans<Menu, MenuAPIResponseDiffers>
+export type MenuAPIResponse = Trans<Menu, MenuAPIResponseDiffers>
 
 export default class MenuRepository {
   private readonly resourceUrl = '/menus'

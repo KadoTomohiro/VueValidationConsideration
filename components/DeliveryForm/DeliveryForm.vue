@@ -155,8 +155,15 @@ export default class DeliveryFormComponent extends Vue {
     passwordConfirm: '',
   }
 
-  get menuList(): Menu[] {
-    return this.$store.state.menuList
+  menuList: Menu[]
+
+  // get menuList(): Menu[] {
+  //   return this.$store.state.menuList
+  // }
+
+  async created() {
+    this.menuList = await this.$repositories.menu.getAll()
+    console.log(this.menuList)
   }
 
   get soySauces(): SoySauces {
@@ -177,7 +184,7 @@ export default class DeliveryFormComponent extends Vue {
     this.form.orders.push({
       menu: {
         name: '',
-        prise: 0,
+        price: 0,
         wasabi: false,
       },
       amount: 1,
@@ -199,7 +206,7 @@ export default class DeliveryFormComponent extends Vue {
   }
 
   sumTotal(order: Order): number {
-    return order.menu.prise * order.amount
+    return order.menu.price * order.amount
   }
 }
 </script>
