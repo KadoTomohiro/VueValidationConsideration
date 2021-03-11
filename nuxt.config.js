@@ -28,7 +28,7 @@ export default {
     '~/plugins/Vuelidate.ts',
     '~/plugins/components.ts',
     '~/plugins/Repository.ts',
-    '~/plugins/AxiosMock.ts',
+    '~/plugins/AxiosAdapter/AxiosMock.ts',
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

@@ -2,13 +2,11 @@
   <div>
     <OrderListLayout>
       <template #menu>
-        <label>
-          <select v-model="order.menu">
-            <option v-for="(menu, menuIndex) in menuList" :key="menuIndex" :value="menu">
-              {{ menu.name }} ({{ menu.prise | currency }})
-            </option>
-          </select>
-        </label>
+        <select v-model="order.menu">
+          <option v-for="(menu, menuIndex) in menuList" :key="menuIndex" :value="menu">
+            {{ menu.name }} ({{ menu.price | currency }})
+          </option>
+        </select>
       </template>
       <template #wasabi>
         <label>
@@ -86,5 +84,6 @@ export default class OrderInput extends Vue {
 
 select {
   height: 2rem;
+  width: 100%;
 }
 </style>

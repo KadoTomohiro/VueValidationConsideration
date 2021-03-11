@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="layout-container">
     <div class="slot menu"><slot name="menu"></slot></div>
     <div class="slot wasabi"><slot name="wasabi"></slot></div>
     <div class="slot amount"><slot name="amount"></slot></div>
@@ -19,28 +19,38 @@ export default class OrderListLayout extends Vue {}
 </script>
 
 <style scoped>
-.container {
+.layout-container {
   padding: 0.5em;
   border-bottom: #a0a0a0 solid 1px;
-  display: flex;
-  align-items: flex-start;
+  display: grid;
+  grid-template-rows: 2rem;
+  grid-template-columns: 15em 4em 5em 5em 3em;
 }
+
 .slot {
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 .menu {
-  width: 10em;
+  grid-row: 1 / 2;
+  grid-column: 1/2;
 }
 .wasabi {
-  width: 4em;
+  grid-row: 1 / 2;
+  grid-column: 2/3;
 }
 .amount {
-  width: 5em;
+  grid-row: 1 / 2;
+  grid-column: 3/4;
 }
 .sumTotal {
-  width: 5em;
+  grid-row: 1 / 2;
+  grid-column: 4/5;
 }
 .remove {
-  width: 3em;
+  grid-row: 1 / 2;
+  grid-column: 5/6;
 }
 </style>

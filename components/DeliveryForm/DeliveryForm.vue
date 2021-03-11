@@ -155,7 +155,7 @@ export default class DeliveryFormComponent extends Vue {
     passwordConfirm: '',
   }
 
-  menuList: Menu[]
+  menuList: Menu[] = []
 
   // get menuList(): Menu[] {
   //   return this.$store.state.menuList
