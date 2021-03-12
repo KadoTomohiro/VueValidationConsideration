@@ -29,7 +29,6 @@
         <button type="button" @click="removeOrder()">-</button>
       </template>
     </OrderListLayout>
-    <!--    <pre>{{ $v.order.amount }}</pre>-->
   </div>
 </template>
 
