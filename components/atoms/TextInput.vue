@@ -25,8 +25,8 @@ export default class TextInputComponent extends Vue {
   }
 
   @Emit()
-  touch(event: UIEvent): UIEvent {
-    return event
+  touch(event: InputEvent): UIEvent {
+    return event.target
   }
 
   blur(event: UIEvent): void {

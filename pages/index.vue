@@ -13,6 +13,7 @@ import { DeliveryForm } from '~/components/DeliveryForm/DeliveryFormModels'
   name: 'index',
 })
 export default class IndexPage extends Vue {
+  num = 0
   formData: DeliveryForm = {
     name: '',
     zipcode: '',

@@ -24,7 +24,7 @@ export default class OrderListLayout extends Vue {}
   border-bottom: #a0a0a0 solid 1px;
   display: grid;
   grid-template-rows: 2rem;
-  grid-template-columns: 15em 4em 5em 5em 3em;
+  grid-template-columns: 7em 4em 5em 5em 3em;
 }
 
 .slot {
