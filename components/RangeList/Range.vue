@@ -1,36 +1,39 @@
 <template>
   <div>
-    <input v-model.number="range.start" type="number" :class="{ error: startError }" /> -
-    <template v-if="last">
-      <input v-model.number="range.end" type="number" :class="{ error: endError }" />
-    </template>
-    <template v-else>
-      <input type="number" :value="range.end" disabled />
-    </template>
+    <input v-model.number="innerStart" type="number" />
+    -
+    <input v-model.number="innerEnd" type="number" :disabled="!last" />
   </div>
 </template>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue'
-import { Component, Prop } from 'vue-property-decorator'
-import { Range } from '~/components/RangeList/Range'
-
-@Component({
+import Vue from 'vue'
+export default Vue.extend({
   name: 'RangeInput',
+  props: {
+    start: { type: [Number, String], required: true },
+    end: { type: [Number, String], required: true },
+    last: { type: Boolean, required: false, default: false },
+  },
+  computed: {
+    innerStart: {
+      get(): number {
+        return this.start
+      },
+      set(value: number) {
+        this.$emit('update:start', value)
+      },
+    },
+    innerEnd: {
+      get(): number {
+        return this.end
+      },
+      set(value: number) {
+        this.$emit('update:end', value)
+      },
+    },
+  },
 })
-export default class RangeInputComponent extends Vue {
-  @Prop({ type: Object as PropType<Range> })
-  readonly range!: Range
-
-  @Prop({ type: Boolean })
-  readonly last!: boolean
-
-  @Prop({ type: Boolean })
-  readonly startError!: boolean
-
-  @Prop({ type: Boolean })
-  readonly endError!: Boolean
-}
 </script>
 
 <style scoped>

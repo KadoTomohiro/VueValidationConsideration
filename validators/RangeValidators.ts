@@ -1,11 +1,11 @@
 import { helpers, ValidationRule } from 'vuelidate/lib/validators'
 
-export function greaterThanBefore(parentArrayName: string): ValidationRule {
+//* *
+// 値が指定された配列の全ての要素以上かを検査する
+//*
+export function greaterEqualThanArray(arrayName: string): ValidationRule {
   return helpers.withParams({ type: 'greaterThanBefore' }, (value: any, vm: any): boolean => {
-    const parentArray = helpers.ref(parentArrayName, this, vm) as number[]
-    console.log(vm)
-    console.log(parentArrayName)
-    console.log(parentArray)
-    return true
+    const array = helpers.ref(arrayName, {}, vm) as number[]
+    return array.every((item) => value >= item)
   })
 }

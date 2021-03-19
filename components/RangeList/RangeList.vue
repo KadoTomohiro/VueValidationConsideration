@@ -1,56 +1,44 @@
 <template>
   <div class="list-container">
-    <div class="list">
-      <ul>
-        <li v-for="(range, index) in ranges" :key="index">
-          <input v-model.number="ranges[index]" type="number" :class="{ error: $v.ranges.$each[index].$invalid }" /> -
-          <template v-if="isLastIndex(index)">
-            <input v-model.number="max" type="number" :class="{ error: $v.max.$invalid }" />
-          </template>
-          <template v-else>
-            <input type="number" :value="getEnd(range, index)" disabled />
-          </template>
-        </li>
-      </ul>
-      <div>
-        <button type="button" @click="add()">+</button>
-        <button type="button" @click="remove()">-</button>
-      </div>
-    </div>
-    <ul>
-      <li v-for="range in ranges">{{ range }}</li>
-    </ul>
     <div>
       <ul>
-        <li v-for="(range, index) in rangeObject" :key="index">
-          <RangeInput :range="range" :last="isLastIndexObject(index, range)"></RangeInput>
+        <li v-for="(range, index) in ranges" :key="index">
+          <RangeInput v-if="isLastIndex(index)" :start.sync="ranges[index]" :end.sync="max" :last="true"></RangeInput>
+          <RangeInput v-else :start.sync="ranges[index]" :end="getEnd(range, index)" :last="false"></RangeInput>
         </li>
       </ul>
-      <button type="button" @click="addObject()">+</button>
-      <button type="button" @click="removeObject()">-</button>
+      <button type="button" @click="add()">+</button>
+      <button type="button" @click="remove()">-</button>
     </div>
-
+    <div>
+      <ul>
+        <li v-for="(range, index) in ranges" :key="index">{{ range }}</li>
+      </ul>
+      {{ max }}
+    </div>
     <ul>
-      <li v-for="rangeo in rangeObject">{{ rangeo }}</li>
+      <li v-for="range in rangeObject">{{ range }}</li>
     </ul>
     <pre>
-      {{ $v }}
+          {{ $v }}
     </pre>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { Component, Watch } from 'vue-property-decorator'
+import { Component } from 'vue-property-decorator'
 import { minLength, minValue, required } from 'vuelidate/lib/validators'
-import { greaterThanBefore } from '~/validators/RangeValidators'
 import RangeInputComponent from '~/components/RangeList/Range.vue'
 import { Range } from '~/components/RangeList/Range'
+import DateSelect from '~/components/molecules/DateSelect.vue'
+import { greaterEqualThanArray } from '~/validators/RangeValidators'
 
 @Component({
   name: 'RangeList',
   components: {
     RangeInput: RangeInputComponent,
+    DateSelect,
   },
   validations: {
     ranges: {
@@ -64,26 +52,22 @@ import { Range } from '~/components/RangeList/Range'
     max: {
       required,
       min: minValue(0),
-      greaterThanBefore: greaterThanBefore('ranges'),
+      greaterThanRange: greaterEqualThanArray('ranges'),
     },
   },
 })
 export default class RangeListComponent extends Vue {
-  ranges: number[] = [0, 0, 0, 0, 0]
-
-  rangeObject: Range[] = [
-    { start: 0, end: 0 },
-    { start: 0, end: 0 },
-    { start: 0, end: 0 },
-    { start: 0, end: 0 },
-    { start: 0, end: 0 },
-  ]
+  ranges: number[] = [10, 20, 0, 0, 0]
 
   max = 0
 
+  get rangeObject(): Range[] {
+    return this.ranges.map((range, index) => ({ start: range, end: this.getEnd(range, index) }))
+  }
+
   getEnd(range: number, index: number): number {
     if (this.isLastIndex(index)) {
-      return 0
+      return this.max
     }
     const nextValue = this.ranges[index + 1]
 
@@ -99,25 +83,11 @@ export default class RangeListComponent extends Vue {
   }
 
   add() {
-    this.ranges.push(this.max + 1)
-    this.max += 1
+    this.ranges.push(0)
   }
 
   remove() {
     this.ranges.pop()
-  }
-
-  addObject() {
-    this.rangeObject.push({ start: 0, end: 0 })
-  }
-
-  removeObject() {
-    this.rangeObject.pop()
-  }
-
-  @Watch('rangeObject')
-  changeRangeObject() {
-    this.rangeObject = this.rangeObject.map((range, index) => {})
   }
 }
 </script>

@@ -91,9 +91,10 @@
       <button type="button" @click="submit()">注文する</button>
     </form>
     <div>
-      <!--      <pre>-->
-      <!--        {{ form }}-->
-      <!--      </pre>-->
+      <pre>
+              {{ form }}
+            </pre
+      >
       <pre>
         {{ $v }}
       </pre>
